@@ -48,7 +48,7 @@ for key in trainingData :
         inputMat = numData['input']
         outputMat = numData['output']
 
-        pixelSize = 15
+        pixelSize = 20
 
         inputDimensionX = len(inputMat) * pixelSize
         inputDimensionY = len(inputMat[0]) * pixelSize
@@ -82,6 +82,11 @@ for key in trainingData :
         # Add grid to the image
         inputImg = draw_grid(inputImg, (len(inputMat), len(inputMat[0])))
         outputImg = draw_grid(outputImg, (len(outputMat), len(outputMat[0])))
+
+        cv2.namedWindow(f'{key}_input', cv2.WINDOW_KEEPRATIO)
+        cv2.resizeWindow(f'{key}_input', 600, 600)
+        cv2.namedWindow(f'{key}_output', cv2.WINDOW_KEEPRATIO)
+        cv2.resizeWindow(f'{key}_output', 600, 600)
 
         while True :
 
