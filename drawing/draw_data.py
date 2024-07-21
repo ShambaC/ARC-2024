@@ -50,20 +50,20 @@ for key in trainingData :
 
         pixelSize = 20
 
-        inputDimensionX = len(inputMat) * pixelSize
-        inputDimensionY = len(inputMat[0]) * pixelSize
+        inputDimensionY = len(inputMat) * pixelSize
+        inputDimensionX = len(inputMat[0]) * pixelSize
 
-        outputDimensionX = len(outputMat) * pixelSize
-        outputDimensionY = len(outputMat[0]) * pixelSize
+        outputDimensionY = len(outputMat) * pixelSize
+        outputDimensionX = len(outputMat[0]) * pixelSize
 
-        inputImg = np.full((inputDimensionX, inputDimensionY, 3), 255, dtype="uint8")
-        outputImg = np.full((outputDimensionX, outputDimensionY, 3), 255, dtype="uint8")
+        inputImg = np.full((inputDimensionY, inputDimensionX, 3), 255, dtype="uint8")
+        outputImg = np.full((outputDimensionY, outputDimensionX, 3), 255, dtype="uint8")
 
         p = q = 0
 
-        for i in range(0, inputDimensionX, pixelSize) :
+        for i in range(0, inputDimensionY, pixelSize) :
             q = 0
-            for j in range(0, inputDimensionY, pixelSize) :
+            for j in range(0, inputDimensionX, pixelSize) :
                 # print(f'i:{i},j:{j},p:{p},q:{q}')
                 # print(inputMat[p][q])
                 inputImg[i:i+pixelSize, j:j+pixelSize] = colorList[inputMat[p][q]]
@@ -72,9 +72,9 @@ for key in trainingData :
 
         p = q = 0
 
-        for i in range(0, outputDimensionX, pixelSize) :
+        for i in range(0, outputDimensionY, pixelSize) :
             q = 0
-            for j in range(0, outputDimensionY, pixelSize) :
+            for j in range(0, outputDimensionX, pixelSize) :
                 outputImg[i:i+pixelSize, j:j+pixelSize] = colorList[outputMat[p][q]]
                 q += 1
             p += 1
@@ -83,10 +83,29 @@ for key in trainingData :
         inputImg = draw_grid(inputImg, (len(inputMat), len(inputMat[0])))
         outputImg = draw_grid(outputImg, (len(outputMat), len(outputMat[0])))
 
-        cv2.namedWindow(f'{key}_input', cv2.WINDOW_KEEPRATIO)
-        cv2.resizeWindow(f'{key}_input', 600, 600)
-        cv2.namedWindow(f'{key}_output', cv2.WINDOW_KEEPRATIO)
-        cv2.resizeWindow(f'{key}_output', 600, 600)
+        cv2.namedWindow(f'{key}_input', cv2.WINDOW_NORMAL)
+        cv2.namedWindow(f'{key}_output', cv2.WINDOW_NORMAL)
+
+        # manage window size based on image size
+        # INPUT IMG
+        if inputDimensionX > inputDimensionY :
+            factor = 600 / inputDimensionX
+            cv2.resizeWindow(f'{key}_input', 600, int(inputDimensionY * factor))
+        elif inputDimensionX < inputDimensionY :
+            factor = 600 / inputDimensionY
+            cv2.resizeWindow(f'{key}_input', int(inputDimensionX * factor), 600)
+        else :
+            cv2.resizeWindow(f'{key}_input', 600, 600)
+
+        # OUTPUT IMG
+        if outputDimensionX > outputDimensionY :
+            factor = 600 / outputDimensionX
+            cv2.resizeWindow(f'{key}_output', 600, int(outputDimensionY * factor))
+        elif outputDimensionX < outputDimensionY :
+            factor = 600 / outputDimensionY
+            cv2.resizeWindow(f'{key}_output', int(outputDimensionX * factor), 600)
+        else :
+            cv2.resizeWindow(f'{key}_output', 600, 600)
 
         while True :
 
