@@ -163,3 +163,8 @@ cython_debug/
 
 # ARC
 data
+
+# config and venv
+.vscode
+Scripts
+pyvenv.cfg
